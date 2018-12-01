@@ -10,7 +10,7 @@ var result = new Vue({
     chartWidth: 600,
     chartHeight: 600,
     chartScale: false,
-    chartLabels: ["Cats", "Dogs"],
+    chartLabels: [],
     chartData: [],
     chartBackgroundColor: [
       "rgba(33, 150, 243, 0.3)",
@@ -47,6 +47,10 @@ var result = new Vue({
           this.countString = newCount + " Stimmen abgegeben."
       }
   }
+})
+
+loadJSON("appsettings.json", (options) => {
+  result.updateLabels([options.OptionA, options.OptionB])
 })
 
 var updateScores = () => {
@@ -88,4 +92,23 @@ function compareArrays(a, b) {
       return false
 
   return true
+}
+
+function loadJSON(filePath, success, error)
+{
+	var xhr = new XMLHttpRequest()
+	xhr.onreadystatechange = function()
+	{
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				if (success)
+					success(JSON.parse(xhr.responseText))
+		} else {
+			if (error)
+				error(xhr)
+			}
+		}
+	}
+	xhr.open("GET", filePath, true)
+	xhr.send()
 }
