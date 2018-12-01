@@ -49,8 +49,8 @@ var result = new Vue({
   }
 })
 
-loadJSON("appsettings.json", (options) => {
-  result.updateLabels([options.OptionA, options.OptionB])
+loadJSON("appsettings.json", (object) => {
+  result.updateLabels(object.options)
 })
 
 var updateScores = () => {
@@ -58,11 +58,12 @@ var updateScores = () => {
     data = JSON.parse(json)
     var a = parseInt(data.a || 0)
     var b = parseInt(data.b || 0)
+    var c = parseInt(data.c || 0)
 
-    var percentages = getPercentages(a, b)
+    var percentagesAndSum = getPercentages([a, b, c])
 
-    result.updateData([percentages.a, percentages.b])
-    result.updateCount(a + b)
+    result.updateData(percentagesAndSum.percentages)
+    result.updateCount(percentagesAndSum.sum)
   })
 }
 
@@ -70,14 +71,20 @@ socket.on('message', function(data) {
   updateScores()
 })
 
-function getPercentages(a, b) {
-  var result = {}
+function getPercentages(array) {
+  var result = {
+    "percentages": [],
+    "sum": 0
+  }
 
-  if (a + b > 0) {
-    result.a = Math.round(a / (a + b) * 100)
-    result.b = 100 - result.a
+  if (array.length > 0) {
+    var sum = array.reduce((a, b ) => a + b, 0)
+    result.sum = sum
+
+    for (var i = 0; i < array.length; i++)
+      result.percentages.push(array[i] * 100 / sum)
   } else {
-    result.a = result.b = 50
+    result.percentages = [50, 50]
   }
 
   return result
