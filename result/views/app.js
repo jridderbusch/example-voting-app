@@ -82,7 +82,7 @@ function getPercentages(array) {
     result.sum = sum
 
     for (var i = 0; i < array.length; i++)
-      result.percentages.push(array[i] * 100 / sum)
+      result.percentages.push((array[i] * 100 / sum).toFixed(2))
   } else {
     result.percentages = [50, 50]
   }

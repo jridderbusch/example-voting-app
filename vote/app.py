@@ -7,7 +7,7 @@ import json
 
 option_a = os.getenv('OPTION_A', "ReactJS")
 option_b = os.getenv('OPTION_B', "Angular5")
-option_c = os.getenv('OPTION_C', "View.js")
+option_c = os.getenv('OPTION_C', "Vue.js")
 hostname = socket.gethostname()
 
 app = Flask(__name__)
