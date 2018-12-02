@@ -24,7 +24,7 @@ button[type="submit"] {
 button i{
   float: right;
   padding-right: 30px;
-  margin-top: 3px;
+  margin-top: 10px;
 }
 
 button.a{
@@ -37,6 +37,13 @@ button.b{
 
 button.c{
   background-color: #09cd51;
+}
+
+img.logo {
+  height: 40px;
+  margin-right: 10px;
+  vertical-align: middle;
+  width: 40px;
 }
 
 #tip{
@@ -99,7 +106,7 @@ button.c{
   margin-top: 10px;
   margin-bottom: 10px;
   text-align: left;
-  padding-left: 50px;
+  padding-left: 30px;
 }
 
 #choice button.a:hover{
