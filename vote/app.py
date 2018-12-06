@@ -5,16 +5,18 @@ import socket
 import random
 import json
 
-option_a = os.getenv('OPTION_A', "ReactJS")
-option_b = os.getenv('OPTION_B', "Angular5")
-option_c = os.getenv('OPTION_C', "Vue.js")
+optionsStr = os.getenv('OPTIONS', "Bees,Beer")
+redisList = os.getenv('REDISLIST', 'votes')
+redisHost = os.getenv('REDISHOST','redis')
+options = optionsStr.split(',')
+
 hostname = socket.gethostname()
 
 app = Flask(__name__)
 
 def get_redis():
     if not hasattr(g, 'redis'):
-        g.redis = Redis(host="redis", db=0, socket_timeout=5)
+        g.redis = Redis(host=redisHost, db=0, socket_timeout=5)
     return g.redis
 
 @app.route("/", methods=['POST','GET'])
@@ -29,13 +31,11 @@ def hello():
         redis = get_redis()
         vote = request.form['vote']
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
-        redis.rpush('votes', data)
+        redis.rpush(redisList, data)
 
     resp = make_response(render_template(
         'index.html',
-        option_a=option_a,
-        option_b=option_b,
-        option_c=option_c,
+        options=options,
         hostname=hostname,
         vote=vote,
     ))

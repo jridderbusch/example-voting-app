@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{{option_a}} vs {{option_b}} vs {{option_c}}!</title>
+    <title>Vote!</title>
     <base href="/index.html">
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
     <meta name="keywords" content="docker-compose, docker, stack">
@@ -13,17 +13,13 @@
   <body>
     <div id="content-container">
       <div id="content-container-center">
-        <h3>{{option_a}} vs {{option_b}} vs {{option_c}}!</h3>
+        <h2>Vote for:</h2>
         <form id="choice" name='form' method="POST" action="/">
-          <button id="a" type="submit" name="vote" class="a" value="a">
-            <img class="logo" src="{{ url_for('static',filename='media/reactjs.png') }}">{{option_a}}
+          {% for option in options %}
+          <button id="a" type="submit" name="vote" class= "{{ option }}" value= "{{ option }}" >
+          {{option}}
           </button>
-          <button id="b" type="submit" name="vote" class="b" value="b">
-            <img class="logo" src="{{ url_for('static',filename='media/angular5.png') }}">{{option_b}}
-          </button>
-          <button id="c" type="submit" name="vote" class="c" value="c">
-            <img class="logo" src="{{ url_for('static',filename='media/vue.js.png') }}">{{option_c}}
-          </button>
+          {% endfor %}
         </form>
         <div id="tip">
           (Tip: you can change your vote)
@@ -33,13 +29,19 @@
         </div>
       </div>
     </div>
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="{{ url_for('static',filename='js/jquery-3.3.1.min.js') }}" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     {% if vote %}
     <script>
-      var vote = "{{vote}}";
+      var vote = "{{vote}}"
+      $("."+vote).prop('disabled', true)
+      $("."+vote).append(' <i class="fa fa-check-circle"></i>')
+      $(".b").css('opacity','0.5')
+      $(".c").css('opacity','0.5')
 
+
+      var options = "{{options}}"
       if(vote == "a"){
         $(".a").prop('disabled', true);
         $(".a").append(' <i class="fa fa-check-circle"></i>');
