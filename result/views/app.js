@@ -12,56 +12,37 @@ var result = new Vue({
     chartScale: false,
     chartLabels: [],
     chartData: [],
-    chartBackgroundColor: [
-      "rgba(33, 150, 243, 0.3)",
-      "rgba(0, 203, 202, 0.3)",
-      "rgba(9, 205, 81, 0.3)"
-    ],
-    chartHoverBackgroundColor: [
-      "rgba(33, 150, 243, 1)",
-      "rgba(0, 203, 202, 1)",
-      "rgba(9, 205, 81, 1)"
-    ],
-    chartBorderColor: [
-      "rgba(33, 150, 243, 1)",
-      "rgba(0, 203, 202, 1)",
-      "rgba(9, 205, 81, 1)"
-    ],
     countString: ""
   },
   methods: {
-    updateLabels(newLabels) {
-        if (!compareArrays(newLabels, this.chartLabels))
-          this.chartLabels = newLabels
-      },
-      updateData(newData) {
-        if (!compareArrays(newData, this.chartData))
-          this.chartData = newData
-      },
-      updateCount(newCount) {
-        if (newCount == 0)
-          this.countString = "Keine Stimmen abgegeben."
-        else if (newCount == 1)
-          this.countString = "Eine Stimme abgegeben."
-        else
-          this.countString = newCount + " Stimmen abgegeben."
-      }
+    updateLabels: function(newLabels) {
+      if (!compareArrays(newLabels, this.chartLabels))
+        this.chartLabels = newLabels
+    },
+    updateData: function(newData) {
+      if (!compareArrays(newData, this.chartData))
+        this.chartData = newData
+    },
+    updateCount: function(newCount) {
+      if (newCount == 0)
+        this.countString = "Keine Stimmen abgegeben."
+      else if (newCount == 1)
+        this.countString = "Eine Stimme abgegeben."
+      else
+        this.countString = newCount + " Stimmen abgegeben."
+    }
   }
-})
-
-loadJSON("appsettings.json", (object) => {
-  result.updateLabels(object.options)
 })
 
 var updateScores = () => {
   socket.on('scores', function(json) {
     data = JSON.parse(json)
-    var a = parseInt(data.a || 0)
-    var b = parseInt(data.b || 0)
-    var c = parseInt(data.c || 0)
+    keys = Object.getOwnPropertyNames(data)
+    votesInt = getDataFromKeys(data, keys)
 
-    var percentagesAndSum = getPercentages([a, b, c])
+    var percentagesAndSum = getPercentages(votesInt)
 
+    result.updateLabels(keys)
     result.updateData(percentagesAndSum.percentages)
     result.updateCount(percentagesAndSum.sum)
   })
@@ -71,6 +52,16 @@ socket.on('message', function(data) {
   updateScores()
 })
 
+function getDataFromKeys(data, keys) {
+  var votes = []
+
+  keys.forEach((key) => {
+    votes.push[data[key]]
+  })
+
+  return votes
+}
+
 function getPercentages(array) {
   var result = {
     "percentages": [],
@@ -78,13 +69,12 @@ function getPercentages(array) {
   }
 
   if (array.length > 0) {
-    var sum = array.reduce((a, b ) => a + b, 0)
+    var sum = array.reduce((a, b) => a + b, 0)
     result.sum = sum
 
-    for (var i = 0; i < array.length; i++)
-      result.percentages.push((array[i] * 100 / sum).toFixed(2))
-  } else {
-    result.percentages = [50, 50]
+    array.forEach((value) => {
+      result.percentages.push((value * 100 / sum).toFixed(2))
+    })
   }
 
   return result
@@ -108,8 +98,7 @@ function loadJSON(filePath, success, error) {
       if (xhr.status === 200) {
         if (success)
           success(JSON.parse(xhr.responseText))
-      }
-      else {
+      } else {
         if (error)
           error(xhr)
       }
