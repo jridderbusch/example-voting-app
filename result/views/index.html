@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Vote - Result</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <div id="app">
-      <div id="result">
-        <chartjs-doughnut
-          :bind="chartBind"
-          :width="chartWidth"
-          :height="chartHeight"
-          :scalesdisplay="chartScale"
-          :backgroundcolor="chartBackgroundColor"
-          :hoverbackgroundcolor="chartHoverBackgroundColor"
-          :bordercolor="chartBorderColor"
-          :labels="chartLabels"
-          :data="chartData">
-        </chartjs-doughnut>
-      </div>
-      <div id="count">
-        {{ countString }}
-      </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script src="https://unpkg.com/vue-chartjs@2.6.0/dist/vue-chartjs.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
-    <script src="https://unpkg.com/hchs-vue-charts@1.2.8"></script>
-    <script src="socket.io.js"></script>
-    <script src="app.js"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Results</title>
+  <meta name="viewport" content="width=device-width, initial-scale = 1.0">
+  <meta name="keywords" content="docker-compose, docker, stack">
+  <meta name="author" content="Docker">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <div id="app">
+    <h1>Hello!</h1>
+    <h2>You can vote for:</h2>
+    <div id="piechart"></div>
+  </div>
+  <script src="vue.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>
